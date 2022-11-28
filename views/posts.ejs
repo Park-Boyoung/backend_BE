@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>post</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/main.js"></script>
+</head>
+
+<body>
+  <a href="/">HOME</a>
+  <h1>post list</h1>
+  <h2>총 포스트 수 <%= postCounts %> </h2>
+  <ul>
+    <% if (postCounts >0) { %>
+    <% for(let i =0; i < postCounts; i++) { %>
+    <li>
+      <p>TITLE: <%= POSTS[i].title %></p>
+      <p>CONTENT: <%= POSTS[i].content %></p>
+      <a href="#" onclick="deletePost('<%= POSTS[i].title %>');">삭제하기</a>
+
+    </li>
+    <% } %>
+    <% } else { %>
+    <li>포스트가 없습니다.</li>
+    <% } %>
+  </ul>
+
+  <!-- post form -->
+  <form action="/posts" method="POST">
+    <div>
+      <label>제목</label>
+      <input type="text" name="title" />
+    </div>
+    <div>
+      <label>내용</label>
+      <input type="text" name="content" />
+    </div>
+
+    <button type="submit">POST 등록</button>
+  </form>
+</body>
+<script>
+  async function deletePost(title) {
+    // console.log(userID);
+    const res = await fetch(`http://localhost:4000/posts/${title}`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json'
+      },
+    }).then((res) => {
+      console.log(res);
+      location.reload();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+</script>
+
+</html>
