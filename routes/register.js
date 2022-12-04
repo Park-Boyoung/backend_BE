@@ -9,29 +9,29 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.render('register');
 });
+
 // 회원가입 처리
-router.post('/', (req, res) => {
-  db.userCheck(req.body.id, (data) => {
-    if (data.length === 0) {
-      db.registerUser(req.body, (result) => {
-        if (result.protocol41) {
-          res.send(
-            '회원 가입 완료 <br> <a href="/login">로그인 페이지로 이동 </a>',
-          );
-        } else {
-          res.status(400);
-          res.send(
-            '회원 가입 문제 발생 <br> <a href="/fegister">회원가입 페이지로 이동 </a>',
-          );
-        }
-      });
-    } else {
-      res.status(400);
+router.post('/', async (req, res) => {
+  const duplicatedUser = await db.userCheck(req.body.id);
+  console.log(duplicatedUser);
+  if (!duplicatedUser) {
+    const registerResult = await db.registerUser(req.body);
+    if (registerResult) {
       res.send(
-        '중복된 회원 ID가 존재합니다.<br> <a href="/fegister">회원가입 페이지로 이동 </a>',
+        '회원 가입 완료 <br> <a href="/login">로그인 페이지로 이동 </a>',
+      );
+    } else {
+      res.status(500);
+      res.send(
+        '회원 가입 문제 발생 <br> <a href="/register">회원가입 페이지로 이동 </a>',
       );
     }
-  });
+  } else {
+    res.status(400);
+    res.send(
+      '중복된 회원 ID가 존재합니다.<br> <a href="/register">회원가입 페이지로 이동 </a>',
+    );
+  }
 });
 
 module.exports = router;
