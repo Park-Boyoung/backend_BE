@@ -1,7 +1,7 @@
 // @ts-check
 const express = require('express');
 
-const db = require('../controllers/userController');
+const db = require('../controllers/userController_mongo');
 
 const router = express.Router();
 
