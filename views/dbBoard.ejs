@@ -117,10 +117,11 @@
   <div class="inner">
     <div class="board_container">
       <div class="board_header">
-        <h1>BOYOUNG board</h1>
+        <h1>Tetz Board</h1>
       </div>
       <div class="board_write">
         <span>현재 등록 글 : &nbsp; <%= articleCounts %></span>
+        <!-- localhost:4000/board/write -->
         <a class="btn red" href="/dbBoard/write">글쓰기</a>
         <a class="btn orange" href="/login/logout">로그아웃</a>
       </div>
@@ -138,9 +139,14 @@
             <div class="content">
               <%= ARTICLE[i].CONTENT %>
             </div>
+            <div class="content">
+              <% if (ARTICLE[i].IMAGE !== null && ARTICLE[i].IMAGE !== undefined) { %>
+              <img src="uploads/<%= ARTICLE[i].IMAGE %>" width="500" />
+              <% } %>
+            </div>
             <div class="foot">
               <% if (ARTICLE[i].USERID === userId) { %>
-              <a class="btn orange" href="dbBoard/modify/<%= ARTICLE[i]._id %>">수정</a>
+              <a class="btn orange" href="/dbBoard/modify/<%= ARTICLE[i]._id %>">수정</a>
               <a class="btn blue" href="#" onclick="deleteArticle('<%= ARTICLE[i]._id %>')">삭제</a>
               <% } %>
             </div>
@@ -149,8 +155,7 @@
           <% } else { %>
           <li>
             <div class="title">글이 없습니다!</div>
-          </li>
-          <% } %>
+            <% } %>
         </ul>
       </div>
     </div>
